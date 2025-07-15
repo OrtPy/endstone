@@ -29,7 +29,7 @@ jobs:
       - name: Install build tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build python3-dev libssl-dev
+          sudo apt-get install -y cmake ninja-build python3-dev libssl-dev clang clang++ libc++-dev libc++abi-dev
 
       # 5. Sentry‑crashpad への依存を省く場合は先に pyproject をパッチ
       #    （Termux でネイティブビルドしないなら不要です）
