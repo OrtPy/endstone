@@ -15,6 +15,7 @@
 #pragma once
 
 #include <string>
+#include <cstdint>  // これを追加
 
 namespace Common {
 std::string getGameVersionString();
@@ -29,3 +30,4 @@ constexpr int TotalTrialTicks = TicksPerMinute * 90;
 constexpr uint8_t NetworkMaxSubClients = 4;
 constexpr int NetworkDefaultMaxConnections = 200;  // Endstone: 40 -> 200
 }  // namespace SharedConstants
+
