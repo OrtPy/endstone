@@ -53,7 +53,7 @@ class EndstoneRecipe(ConanFile):
             )
 
         if self.settings.os == "Linux" and not self.settings.compiler.libcxx == "libc++":
-            raise ConanInvalidConfiguration(f"{self.ref} requires C++ standard libraries libc++ on Linux.")
+            raise ConanInvalidConfiguration(f"{self.ref} requires C++ standard libraries libstdc++11 on Linux.")
 
     def requirements(self):
         self.requires("base64/0.5.2")
