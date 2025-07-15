@@ -56,9 +56,9 @@ constexpr decltype(auto) invoke(const char *function, Func &&func, Args &&...arg
 }
 }  // namespace endstone::detail
 
-#define BEDROCK_CALL(fp, ...)                                                                        \
-    endstone::detail::invoke(                                                                        \
-        __FUNCDNAME__,                                                                               \
+#define BEDROCK_CALL(fp, ...) \
+    endstone::detail::invoke( \
+        __func__, \                                                                              \
         endstone::detail::fp_cast(fp, static_cast<char *>(endstone::detail::get_executable_base()) + \
                                           endstone::detail::get_symbol(__FUNCDNAME__)),              \
         ##__VA_ARGS__)
