@@ -25,12 +25,14 @@ jobs:
         with:
           python-version: '3.12'
 
-      # 4. ビルドに必要なツールをインストール
+      # 4. ビルドに必要なツールをインストール（sudo付きでllvm.shを実行）
       - name: Install build tools
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake ninja-build python3-dev libssl-dev
-          wget https://apt.llvm.org/llvm.sh && chmod +x llvm.sh && ./llvm.sh 16
+          wget https://apt.llvm.org/llvm.sh
+          chmod +x llvm.sh
+          sudo ./llvm.sh 16
 
       # 5. Sentry‑crashpad への依存を省く場合は先に pyproject をパッチ
       #    （Termux でネイティブビルドしないなら不要です）
