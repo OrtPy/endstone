@@ -30,10 +30,12 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y cmake ninja-build python3-dev libssl-dev
-          wget https://apt.llvm.org/llvm.sh
-          chmod +x llvm.sh
-          sudo ./llvm.sh 16
-
+          # LLVM 16 のリポジトリとしてUbuntu 22.04 (jammy) を使う
+          echo "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-16 main" | sudo tee /etc/apt/sources.list.d/llvm.list
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get install -y clang-16
+          
       # 5. Sentry‑crashpad への依存を省く場合は先に pyproject をパッチ
       #    （Termux でネイティブビルドしないなら不要です）
       #- name: Remove crashpad dependency
