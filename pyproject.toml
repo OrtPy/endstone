@@ -88,16 +88,6 @@ extend-exclude = ["endstone_python.pyi"]
 line-length = 120
 lint.extend-select = ["I"]
 
-[tool.cibuildwheel]
-skip = ["pp*"]
-test-command = "pytest {package}/tests/endstone/python"
-test-requires = "pytest"
-repair-wheel-command = [
-    "pip install auditwheel==6.2.0 sentry-cli",
-    'python scripts/repair_wheel.py -o endstone -p endstone -w {dest_dir} {wheel}',
-]
-
-[tool.cibuildwheel.linux]
 manylinux-x86_64-image = "ghcr.io/endstonemc/manylinux_2_31_x86_64"
 environment = { LLVM_VERSION = 16, CC = "/usr/bin/clang", CXX = "/usr/bin/clang++" }
 before-all = [
