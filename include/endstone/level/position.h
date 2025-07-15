@@ -16,6 +16,7 @@
 
 #include <memory>
 #include <optional>
+#include <cmath>  // ★ 追加
 
 #include "endstone/util/vector.h"
 
@@ -58,7 +59,7 @@ public:
      */
     [[nodiscard]] int getBlockX() const
     {
-        return static_cast<int>(std::floorf(x_));
+        return static_cast<int>(std::floor(x_));  // ★ 修正
     }
 
     /**
@@ -68,7 +69,7 @@ public:
      */
     [[nodiscard]] int getBlockY() const
     {
-        return static_cast<int>(std::floorf(y_));
+        return static_cast<int>(std::floor(y_));  // ★ 修正
     }
 
     /**
@@ -78,7 +79,7 @@ public:
      */
     [[nodiscard]] int getBlockZ() const
     {
-        return static_cast<int>(std::floorf(z_));
+        return static_cast<int>(std::floor(z_));  // ★ 修正
     }
 
 private:
