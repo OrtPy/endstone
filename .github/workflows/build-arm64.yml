@@ -1,0 +1,66 @@
+name: Build ARM64 Wheels
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build ARM64 Wheel
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. ソースをチェックアウト
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. ARM64 エミュレーションを有効化
+      - name: Set up QEMU for ARM64
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: linux/arm64
+
+      # 3. Python 3.12 をセットアップ
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      # 4. ビルドに必要なツールをインストール
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build python3-dev libssl-dev
+
+      # 5. Sentry‑crashpad への依存を省く場合は先に pyproject をパッチ
+      #    （Termux でネイティブビルドしないなら不要です）
+      #- name: Remove crashpad dependency
+      #  run: |
+      #    sed -i '/sentry-crashpad/d' pyproject.toml
+
+      # 6. Linux 用 Conan オーバーライド／libstdc++11 を確定
+      - name: Patch pyproject.toml for Conan
+        run: |
+          sed -i 's|compiler.libcxx *= *".*"|compiler.libcxx = "libstdc++11"|' pyproject.toml
+
+      # 7. 仮想環境でホイールをビルド
+      - name: Build wheel
+        run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip setuptools wheel scikit-build-core auditwheel conan
+          pip wheel . --no-deps -w dist
+
+      # 8. manylinux2014_aarch64 用に修正
+      - name: Repair wheel for manylinux2014_aarch64
+        run: |
+          source .venv/bin/activate
+          for whl in dist/*aarch64*.whl; do
+            auditwheel repair "$whl" --plat manylinux2014_aarch64 -w dist/
+          done
+
+      # 9. アーティファクトとしてアップロード
+      - name: Upload ARM64 wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: arm64-wheels
+          path: dist/*.whl
