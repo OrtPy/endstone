@@ -52,7 +52,7 @@ class EndstoneRecipe(ConanFile):
                 f"{self.ref} can only be built on Windows or Linux. {self.settings.os} is not supported."
             )
 
-        if self.settings.os == "Linux" and not self.settings.compiler.libcxx == "libc++":
+        if self.settings.os == "Linux" and not self.settings.compiler.libcxx == "libstdc++11":
             raise ConanInvalidConfiguration(f"{self.ref} requires C++ standard libraries libstdc++11 on Linux.")
 
     def requirements(self):
